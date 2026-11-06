@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -10,7 +12,7 @@ import { Button } from '@/components/ui/button';
 
 /** Small AnythingMCP brand mark for the top of pre-auth cards. */
 function BrandMark() {
-  return (
+  return wrapLocalized(
     <div className="flex items-center justify-center gap-2">
       <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--brand-tint)] text-[var(--brand)]">
         <LogoIcon size={20} />
@@ -103,7 +105,7 @@ function AcceptInviteContent() {
     await accept(signedInAsInvitee ? {} : { password });
   };
 
-  return (
+  return wrapLocalized(
     <div className="w-full max-w-md">
       {valid === false ? (
         <Card className="p-6 text-center">
@@ -275,7 +277,7 @@ function AcceptInviteContent() {
 }
 
 export default function AcceptInvitePage() {
-  return (
+  return wrapLocalized(
     <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-4">
       <Suspense fallback={<p className="text-[var(--text-2)]">Loading...</p>}>
         <AcceptInviteContent />

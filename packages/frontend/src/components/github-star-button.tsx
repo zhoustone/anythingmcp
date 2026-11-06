@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useEffect } from 'react';
 import { useEdition } from '@/lib/use-edition';
@@ -30,7 +32,7 @@ export function GithubStarButton() {
     } catch {}
   };
 
-  return (
+  return wrapLocalized(
     <div className="mx-3 mb-2 flex items-center justify-between gap-2 rounded-[10px] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs shadow-sm transition-colors hover:border-[var(--text-3)] group">
       <a
         href="https://github.com/HelpCode-ai/anythingmcp"

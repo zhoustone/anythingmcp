@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTheme } from '@/lib/theme-context';
 import { useI18n } from '@/lib/i18n-context';
+import { AutoTranslate } from '@/components/auto-translate';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Footer } from '@/components/footer';
 import { TrialBanner } from '@/components/trial-banner';
@@ -83,9 +84,13 @@ export function AppShell({
   const { t } = useI18n();
   const isDark = resolvedTheme === 'dark';
 
-  const headerTitle = title ?? breadcrumbs?.[breadcrumbs.length - 1]?.label;
+  // These arrive as props, not JSX children, so the tree walker cannot reach
+  // them; translate them explicitly. Unknown text falls back unchanged.
+  const rawTitle = title ?? breadcrumbs?.[breadcrumbs.length - 1]?.label;
+  const headerTitle = rawTitle ? t(rawTitle) : undefined;
 
   return (
+    <AutoTranslate>
     <div className="flex h-dvh items-stretch overflow-hidden">
       <AppSidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
@@ -123,14 +128,14 @@ export function AppShell({
                   className="mb-0.5 flex items-center gap-1 text-[12px] text-[var(--text-3)] hover:text-[var(--text)]"
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                  {backTo.label}
+                  {t(backTo.label)}
                 </Link>
               )}
               {headerTitle && (
                 <div className="truncate text-[16px] font-semibold tracking-[-0.02em]">{headerTitle}</div>
               )}
               {subtitle && (
-                <div className="mt-px hidden truncate text-[12.5px] text-[var(--text-3)] md:block">{subtitle}</div>
+                <div className="mt-px hidden truncate text-[12.5px] text-[var(--text-3)] md:block">{t(subtitle)}</div>
               )}
             </div>
             {/* Phones: the theme toggle rides the title row, so the second row
@@ -167,5 +172,6 @@ export function AppShell({
         </main>
       </div>
     </div>
+    </AutoTranslate>
   );
 }

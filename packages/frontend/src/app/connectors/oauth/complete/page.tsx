@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -58,7 +60,7 @@ function CompleteContent() {
   }
 
   if (error) {
-    return (
+    return wrapLocalized(
       <div className="space-y-4">
         <h1 className="text-lg font-semibold text-[var(--text)]">Authorization not completed</h1>
         <p role="alert" className="text-sm text-[var(--text-2)]">{error}</p>
@@ -76,7 +78,7 @@ function CompleteContent() {
 }
 
 export default function OAuthCompletePage() {
-  return (
+  return wrapLocalized(
     <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] p-6">
       <Card className="w-full max-w-md p-6">
         <Suspense fallback={<p className="text-sm text-[var(--text-2)]">Loading…</p>}>

@@ -1,4 +1,5 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
 
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
@@ -39,6 +40,7 @@ export default function GlobalError({
   }, [error, offline]);
 
   return (
+    <AutoTranslate>
     <div
       style={{
         minHeight: '60vh',
@@ -115,5 +117,6 @@ export default function GlobalError({
         </div>
       </div>
     </div>
+    </AutoTranslate>
   );
 }

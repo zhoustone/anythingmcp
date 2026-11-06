@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -97,7 +99,7 @@ export function TrialBanner() {
     else if (outcome === 'failed') window.location.assign(pricingUrl);
   };
 
-  return (
+  return wrapLocalized(
     <div
       className="text-sm py-2 px-4 text-center"
       style={{

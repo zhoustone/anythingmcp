@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
@@ -158,7 +160,7 @@ export function ResponseMappingPanel({ state, onChange, connectorId, toolId }: P
     }
   };
 
-  return (
+  return wrapLocalized(
     <div className="border border-[var(--border)] rounded-md p-3 space-y-3">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>

@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import {
   CLOUD_PLANS,
@@ -38,7 +40,7 @@ function PeriodToggle({
       {label}
     </button>
   );
-  return (
+  return wrapLocalized(
     <div
       role="radiogroup"
       aria-label="Billing period"
@@ -71,7 +73,7 @@ export function PlanPicker({
   compact?: boolean;
   disabled?: boolean;
 }) {
-  return (
+  return wrapLocalized(
     <div className="space-y-4">
       <div className="flex justify-center">
         <PeriodToggle
@@ -88,7 +90,7 @@ export function PlanPicker({
       >
         {CLOUD_PLANS.map((plan) => {
           const selected = value.plan === plan.id;
-          return (
+          return wrapLocalized(
             <button
               key={plan.id}
               type="button"

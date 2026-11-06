@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -126,7 +128,7 @@ export default function StartTrialPage() {
   };
 
   if (!ready) {
-    return (
+    return wrapLocalized(
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
         <div className="text-sm text-[var(--text-2)]">Loading…</div>
       </div>
@@ -145,7 +147,7 @@ export default function StartTrialPage() {
         ? 'Continue to checkout'
         : 'Start free trial with card';
 
-  return (
+  return wrapLocalized(
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <header className="max-w-3xl mx-auto px-6 pt-5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">

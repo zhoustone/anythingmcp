@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -42,7 +44,7 @@ export function EditionBanner() {
 
   if (!text) return null;
 
-  return (
+  return wrapLocalized(
     <div
       className="text-sm py-2 px-4 text-center"
       style={{ backgroundColor: `var(--t-${tone}-bg)`, color: `var(--t-${tone}-fg)` }}

@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -102,7 +104,7 @@ function LicenseActivateInner() {
       });
   }, [key, token, user, isLoading, router]);
 
-  return (
+  return wrapLocalized(
     <div className="mx-auto w-full max-w-md">
       <div className="mb-6">
         <h1 className="text-base font-semibold text-[var(--text)]">License Activation</h1>
@@ -144,7 +146,7 @@ function LicenseActivateInner() {
 }
 
 export default function LicenseActivatePage() {
-  return (
+  return wrapLocalized(
     <Suspense>
       <LicenseActivateInner />
     </Suspense>

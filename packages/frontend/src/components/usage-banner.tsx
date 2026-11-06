@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useState } from 'react';
 import { license } from '@/lib/api';
@@ -52,7 +54,7 @@ export function UsageBanner() {
     overAxes.push(`${usage.users.current}/${usage.users.max} users`);
   }
 
-  return (
+  return wrapLocalized(
     <div
       className="text-sm py-2 px-4 text-center"
       style={{

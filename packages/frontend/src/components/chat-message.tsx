@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -14,7 +16,7 @@ function CopyButton({ text }: { text: string }) {
     setTimeout(() => setCopied(false), 2000);
   }, [text]);
 
-  return (
+  return wrapLocalized(
     <button
       onClick={handleCopy}
       className="absolute top-2 right-2 px-2 py-1 text-xs rounded bg-[var(--muted)] hover:bg-[var(--border)] text-[var(--muted-foreground)] transition-colors"
@@ -32,7 +34,7 @@ export function ChatMessage({
   content: string;
 }) {
   if (role === 'user') {
-    return (
+    return wrapLocalized(
       <div className="flex justify-end">
         <div className="max-w-[80%] px-4 py-2 rounded-lg text-sm whitespace-pre-wrap bg-[var(--brand)] text-[var(--primary-foreground)]">
           {content}
@@ -41,7 +43,7 @@ export function ChatMessage({
     );
   }
 
-  return (
+  return wrapLocalized(
     <div className="flex justify-start">
       <div className="max-w-[85%] rounded-lg text-sm chat-message">
         <ReactMarkdown
@@ -72,21 +74,21 @@ export function ChatMessage({
               return <strong className="font-semibold">{children}</strong>;
             },
             a({ href, children }) {
-              return (
+              return wrapLocalized(
                 <a href={href} target="_blank" rel="noopener noreferrer" className="text-[var(--brand)] underline hover:opacity-80">
                   {children}
                 </a>
               );
             },
             blockquote({ children }) {
-              return (
+              return wrapLocalized(
                 <blockquote className="border-l-3 border-[var(--brand)] pl-3 my-3 text-[var(--muted-foreground)] italic">
                   {children}
                 </blockquote>
               );
             },
             table({ children }) {
-              return (
+              return wrapLocalized(
                 <div className="overflow-x-auto mb-3">
                   <table className="min-w-full border-collapse border border-[var(--border)] text-xs">
                     {children}
@@ -109,7 +111,7 @@ export function ChatMessage({
 
               // Inline code
               if (!match && !codeString.includes('\n')) {
-                return (
+                return wrapLocalized(
                   <code className="bg-[var(--muted)] px-1.5 py-0.5 rounded text-xs font-mono text-[var(--brand)]" {...props}>
                     {children}
                   </code>
@@ -118,7 +120,7 @@ export function ChatMessage({
 
               // Code block
               const language = match ? match[1] : '';
-              return (
+              return wrapLocalized(
                 <div className="relative my-3 rounded-lg overflow-hidden border border-[var(--border)]">
                   {language && (
                     <div className="flex items-center justify-between px-3 py-1.5 bg-[var(--muted)] border-b border-[var(--border)]">

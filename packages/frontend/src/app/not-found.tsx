@@ -1,7 +1,9 @@
+import { AutoTranslate } from '@/components/auto-translate';
 import Link from 'next/link';
 
 export default function NotFound() {
   return (
+    <AutoTranslate>
     <div
       style={{
         minHeight: '60vh',
@@ -56,5 +58,6 @@ export default function NotFound() {
         </Link>
       </div>
     </div>
+    </AutoTranslate>
   );
 }

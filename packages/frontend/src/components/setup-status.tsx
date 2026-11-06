@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import Link from 'next/link';
 import { StatusPill } from '@/components/ui/badge';
@@ -28,7 +30,7 @@ const COPY: Record<Exclude<ConnectorSetupStatus, 'ready'>, { pill: string; banne
 /** Shown next to "Active" when the connector cannot serve calls yet. */
 export function SetupStatusPill({ status }: { status?: ConnectorSetupStatus | null }) {
   if (!status || status === 'ready') return null;
-  return (
+  return wrapLocalized(
     <StatusPill tone="warn" dot="var(--warn)">
       {COPY[status].pill}
     </StatusPill>
@@ -45,7 +47,7 @@ export function SetupStatusBanner({
   if (!status || status === 'ready') return null;
   const missing = connector.missingVariables ?? [];
   const catalog = !!connector.config?.adapterSlug;
-  return (
+  return wrapLocalized(
     <div role="status" className="flex flex-wrap items-center gap-3 rounded-[10px] border border-[var(--border)] bg-[var(--t-warn-bg)] p-3 text-sm text-[var(--t-warn-fg)]">
       <div className="min-w-0 flex-1">
         <p className="font-medium">{COPY[status].banner}</p>

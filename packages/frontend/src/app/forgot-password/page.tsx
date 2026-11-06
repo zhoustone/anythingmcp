@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -10,7 +12,7 @@ import { Button } from '@/components/ui/button';
 
 /** Small AnythingMCP brand mark for the top of pre-auth cards. */
 function BrandMark() {
-  return (
+  return wrapLocalized(
     <div className="flex items-center justify-center gap-2">
       <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--brand-tint)] text-[var(--brand)]">
         <LogoIcon size={20} />
@@ -51,7 +53,7 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  return (
+  return wrapLocalized(
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
       <div className="w-full max-w-sm">
         <Card className="p-6">

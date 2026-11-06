@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
@@ -33,7 +35,7 @@ type SetupStep = 'auth' | 'verify-email' | 'check-inbox' | 'license-choice' | 'l
 
 /** Small AnythingMCP brand mark for the top of pre-auth cards. */
 function BrandMark() {
-  return (
+  return wrapLocalized(
     <div className="flex items-center justify-center gap-2">
       <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--brand-tint)] text-[var(--brand)]">
         <LogoIcon size={20} />
@@ -467,7 +469,7 @@ function LoginForm() {
   // ── Email Verification Step ─────────────────────────────────────────────
 
   if (setupStep === 'verify-email') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -557,7 +559,7 @@ function LoginForm() {
   // ── Check Inbox Step (Cloud sign-up for an address we cannot sign in to) ──
 
   if (setupStep === 'check-inbox') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -598,7 +600,7 @@ function LoginForm() {
   // ── Trial Activated Step (Cloud Mode) ───────────────────────────────────
 
   if (setupStep === 'trial-activated') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -654,7 +656,7 @@ function LoginForm() {
   // ── License Choice Step ─────────────────────────────────────────────────
 
   if (setupStep === 'license-choice') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -724,7 +726,7 @@ function LoginForm() {
   // ── License Email Sent Step ────────────────────────────────────────────
 
   if (setupStep === 'license-email-sent') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -785,7 +787,7 @@ function LoginForm() {
   // ── License Key Entry Step ──────────────────────────────────────────────
 
   if (setupStep === 'license-key') {
-    return (
+    return wrapLocalized(
       <div className={singleColumn}>
         <Card className="p-6">
           <div className="text-center mb-6">
@@ -1119,7 +1121,7 @@ function LoginForm() {
   );
 
   if (cloudSignup) {
-    return (
+    return wrapLocalized(
       <div className="grid w-full lg:min-h-dvh lg:grid-cols-2">
         <div className="flex items-center justify-center px-4 py-6 sm:py-10 lg:px-6 lg:py-12">{formCard}</div>
         <TrustPanel stats={trustStats} directoryBadge={showDirectoryBadge} />
@@ -1127,7 +1129,7 @@ function LoginForm() {
     );
   }
 
-  return (
+  return wrapLocalized(
     <div className={singleColumn}>
       {formCard}
       {infoLoaded && <TrustLine cloud={isCloudMode} />}

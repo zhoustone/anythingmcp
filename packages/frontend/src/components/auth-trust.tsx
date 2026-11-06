@@ -1,5 +1,8 @@
+import { AutoTranslate } from '@/components/auto-translate';
 import { CLAUDE_DIRECTORY_URL } from '@/lib/marketing';
 import type { TrustStatsDisplay } from '@/lib/trust-stats';
+
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 /**
  * Trust content next to the sign-up and sign-in forms. The numbers are live
@@ -19,7 +22,7 @@ const CLIENTS = [
 ];
 
 function Tick() {
-  return (
+  return wrapLocalized(
     <span aria-hidden className="mt-px font-bold text-[#4ade80]">
       &#10003;
     </span>
@@ -40,7 +43,7 @@ export function TrustPanel({
     stats?.workspaces ? { n: stats.workspaces, l: 'workspaces on AnythingMCP Cloud' } : null,
   ].filter(Boolean) as Array<{ n: string; l: string }>;
 
-  return (
+  return wrapLocalized(
     <aside
       aria-label="Why teams build on AnythingMCP"
       className="relative overflow-hidden bg-[#0b1220] px-5 py-8 text-[#e7ebf3] sm:px-10 lg:flex lg:flex-col lg:justify-center lg:px-14 lg:py-14"
@@ -139,7 +142,7 @@ export function TrustLine({ cloud }: { cloud: boolean }) {
     ...(cloud ? ['Hosted in Frankfurt', 'GDPR · DPA'] : []),
     'Every call in your audit log',
   ];
-  return (
+  return wrapLocalized(
     <div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-xs text-[var(--text-3)]">
       {items.map((i) => (
         <span key={i}>{i}</span>

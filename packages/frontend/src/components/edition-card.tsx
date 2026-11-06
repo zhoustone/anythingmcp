@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState } from 'react';
 import { license, type EditionState } from '@/lib/api';
@@ -67,7 +69,7 @@ export function EditionCard({ edition, onChange }: { edition: EditionState; onCh
         ? `${edition.seatsUsed} of ${edition.seatLimit} active users`
         : `${edition.seatsUsed} active users, ${edition.seatLimit} included`;
 
-  return (
+  return wrapLocalized(
     <Card className="p-5">
       <div className="flex flex-wrap items-center gap-2 mb-1">
         <h2 className="text-sm font-semibold text-[var(--text)]">{editionLabel(edition)}</h2>

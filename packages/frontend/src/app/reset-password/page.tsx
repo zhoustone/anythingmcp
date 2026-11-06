@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -11,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 /** Small AnythingMCP brand mark for the top of pre-auth cards. */
 function BrandMark() {
-  return (
+  return wrapLocalized(
     <div className="flex items-center justify-center gap-2">
       <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--brand-tint)] text-[var(--brand)]">
         <LogoIcon size={20} />
@@ -63,7 +65,7 @@ function ResetPasswordForm() {
   };
 
   if (!token) {
-    return (
+    return wrapLocalized(
       <div className="text-center">
         <h2 className="text-base font-semibold mb-2 text-[var(--text)]">Invalid Link</h2>
         <p className="text-sm text-[var(--text-2)] mb-4">
@@ -153,7 +155,7 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
-  return (
+  return wrapLocalized(
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
       <div className="w-full max-w-sm">
         <Card className="p-6">

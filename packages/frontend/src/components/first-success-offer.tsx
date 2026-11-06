@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -87,7 +89,7 @@ export function FirstSuccessOffer({ via, refreshKey = 0 }: { via: OfferVia; refr
     setDismissed(true);
   };
 
-  return (
+  return wrapLocalized(
     <div
       role="region"
       aria-label="Start your trial"

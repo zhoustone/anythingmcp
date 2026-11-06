@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -79,14 +81,14 @@ export default function WelcomePage() {
   };
 
   if (isLoading || !user) {
-    return (
+    return wrapLocalized(
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
         <div className="text-sm text-[var(--text-2)]">Loading…</div>
       </div>
     );
   }
 
-  return (
+  return wrapLocalized(
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <header className="border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">

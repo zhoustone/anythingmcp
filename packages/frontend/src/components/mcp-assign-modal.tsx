@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useState } from 'react';
 import { mcpServers } from '@/lib/api';
@@ -71,7 +73,7 @@ export function McpAssignModal({ connectorId, connectorName, token, onDone, onCl
     }
   };
 
-  return (
+  return wrapLocalized(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-[var(--background)] border border-[var(--border)] rounded-lg shadow-lg w-full max-w-md mx-4 p-6 max-h-[80vh] flex flex-col">
@@ -117,7 +119,7 @@ export function McpAssignModal({ connectorId, connectorName, token, onDone, onCl
                 <div className="space-y-2 mb-4">
                   {filtered.map((srv) => {
                     const connCount = srv.connectors?.length || srv._count?.connectors || 0;
-                    return (
+                    return wrapLocalized(
                       <label
                         key={srv.id}
                         className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-colors ${

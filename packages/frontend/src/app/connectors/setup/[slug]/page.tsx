@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -244,7 +246,7 @@ function SetupContent() {
   };
 
   if (loadError) {
-    return (
+    return wrapLocalized(
       <Card className="p-6">
         <p role="alert" className="text-sm text-[var(--text-2)]">{loadError}</p>
         <Link href="/connectors/store" className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-4')}>
@@ -256,7 +258,7 @@ function SetupContent() {
   if (!info) return <p className="text-sm text-[var(--text-2)]">Loading…</p>;
 
   if (phase === 'done' && result) {
-    return (
+    return wrapLocalized(
       <Card className="space-y-4 p-6">
         <div className="flex items-center gap-3">
           <ConnectorLogo icon={info.icon} name={info.name} />
@@ -309,7 +311,7 @@ function SetupContent() {
   const renderField = (f: EnvVarDescriptor) => {
     const id = `field-${f.name}`;
     const show = revealed[f.name] === true;
-    return (
+    return wrapLocalized(
       <div key={f.name}>
         <label htmlFor={id} className="mb-1 block text-sm font-medium text-[var(--text)]">
           {f.label}
@@ -367,7 +369,7 @@ function SetupContent() {
     );
   };
 
-  return (
+  return wrapLocalized(
     <div className="space-y-4">
       <Card className="space-y-5 p-6">
         <div className="flex items-center gap-3">
@@ -422,7 +424,7 @@ function SetupContent() {
         {GROUPS.map(({ kind, title }) => {
           const group = visibleFields.filter((f) => f.kind === kind);
           if (group.length === 0) return null;
-          return (
+          return wrapLocalized(
             <fieldset key={kind} className="space-y-3">
               <legend className="mb-1 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--text-3)]">{title}</legend>
               {group.map(renderField)}
@@ -504,7 +506,7 @@ function SetupContent() {
 }
 
 export default function ConnectorSetupPage() {
-  return (
+  return wrapLocalized(
     <AppShell>
       <div className="mx-auto w-full max-w-2xl p-4 sm:p-6">
         <Suspense fallback={<p className="text-sm text-[var(--text-2)]">Loading…</p>}>

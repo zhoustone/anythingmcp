@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -96,7 +98,7 @@ export function StarterPack({ token }: { token: string }) {
 
   const bySlug = new Map(items.map((i) => [i.slug, i]));
 
-  return (
+  return wrapLocalized(
     <section aria-labelledby="starter-pack-title" className="mb-10">
       <p className="mb-1.5 font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-3)]">
         No-key demos
@@ -137,7 +139,7 @@ export function StarterPack({ token }: { token: string }) {
           <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => {
               const checked = item.installed || selected.has(item.slug);
-              return (
+              return wrapLocalized(
                 <li key={item.slug} className="min-w-0">
                   <label
                     className={
@@ -238,7 +240,7 @@ function StarterPackOutcome({
 }) {
   const added = outcome.results.filter((r) => r.status === 'installed');
   const failed = outcome.results.filter((r) => r.status === 'failed');
-  return (
+  return wrapLocalized(
     <div className="rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
       <p role="status" className="text-sm font-semibold text-[var(--text)]">
         {added.length > 0
@@ -253,7 +255,7 @@ function StarterPackOutcome({
         {outcome.results.map((r) => {
           const item = bySlug.get(r.slug);
           const demo = r.connectorId ? findDemoBySlug(r.slug) : undefined;
-          return (
+          return wrapLocalized(
             <li key={r.slug} className="flex min-w-0 items-center gap-3 py-2.5">
               <ConnectorLogo icon={item?.icon ?? r.slug} name={item?.name ?? r.slug} small />
               <span className="min-w-0 flex-1">
@@ -304,7 +306,7 @@ function StarterPackOutcome({
 }
 
 function Tick({ checked, muted }: { checked: boolean; muted?: boolean }) {
-  return (
+  return wrapLocalized(
     <span
       aria-hidden
       className="mt-0.5 flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-[5px] border-[1.5px]"

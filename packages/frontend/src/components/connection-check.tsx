@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useRef, useState } from 'react';
 import { mcpServers, productEvents } from '@/lib/api';
@@ -94,7 +96,7 @@ export function ConnectionCheck({
   if (state.kind === 'loading') return null;
 
   if (state.kind === 'active') {
-    return (
+    return wrapLocalized(
       <div
         className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-[12.5px]"
         style={{ background: 'var(--t-emerald-bg)', color: 'var(--t-emerald-fg)' }}
@@ -106,7 +108,7 @@ export function ConnectionCheck({
   }
 
   if (state.kind === 'arrived') {
-    return (
+    return wrapLocalized(
       <Card className="p-[18px]" role="region" aria-label="Connection check" aria-live="polite">
         <div className="flex items-start gap-3">
           <span
@@ -127,7 +129,7 @@ export function ConnectionCheck({
     );
   }
 
-  return (
+  return wrapLocalized(
     <Card className="p-[18px]" role="region" aria-label="Connection check" aria-live="polite">
       <div className="flex items-start gap-3">
         <span className="relative mt-1 flex h-2.5 w-2.5 flex-shrink-0" aria-hidden>

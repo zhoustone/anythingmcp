@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { cn } from '@/lib/utils';
 
@@ -40,7 +42,7 @@ export function HeadersEditor({
   const add = () => onChange([...rows, { key: '', value: '' }]);
   const remove = (i: number) => onChange(rows.filter((_, idx) => idx !== i));
 
-  return (
+  return wrapLocalized(
     <div>
       <label className={labelClass}>{label}</label>
       {rows.length > 0 && (

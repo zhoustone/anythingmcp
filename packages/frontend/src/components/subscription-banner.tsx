@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -53,7 +55,7 @@ export function SubscriptionBanner() {
   if (!summary) return null;
   const tone = summary.tone === 'neutral' ? 'info' : summary.tone;
 
-  return (
+  return wrapLocalized(
     <div
       className="text-sm py-2 px-4 text-center"
       style={{ backgroundColor: `var(--t-${tone}-bg)`, color: `var(--t-${tone}-fg)` }}

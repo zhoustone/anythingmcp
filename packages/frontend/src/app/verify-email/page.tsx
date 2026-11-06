@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -13,7 +15,7 @@ const API_BASE = '';
 
 /** Small AnythingMCP brand mark for the top of pre-auth cards. */
 function BrandMark() {
-  return (
+  return wrapLocalized(
     <div className="flex items-center justify-center gap-2">
       <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[8px] bg-[var(--brand-tint)] text-[var(--brand)]">
         <LogoIcon size={20} />
@@ -64,7 +66,7 @@ function VerifyEmailContent() {
       });
   }, [token]);
 
-  return (
+  return wrapLocalized(
     <div className="w-full max-w-sm">
       <Card className="p-6">
         <div className="text-center mb-6">
@@ -114,7 +116,7 @@ function VerifyEmailContent() {
 }
 
 export default function VerifyEmailPage() {
-  return (
+  return wrapLocalized(
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
       <Suspense>
         <VerifyEmailContent />

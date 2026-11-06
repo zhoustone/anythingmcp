@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -51,7 +53,7 @@ export function EnterpriseNotice({
       ? { href: buildEnterpriseContactUrl(), label: 'Contact us about Enterprise' }
       : { href: pricingUrl, label: 'View plans' };
 
-  return (
+  return wrapLocalized(
     <div className="rounded-[12px] border border-[var(--brand)] bg-[var(--brand-tint)] p-4">
       <h3 className="text-sm font-semibold text-[var(--text)]">{title}</h3>
       <p className="text-[13px] text-[var(--text-2)] mt-1 max-w-2xl">{body}</p>

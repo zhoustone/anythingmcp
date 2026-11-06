@@ -1,4 +1,5 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -40,6 +41,7 @@ export default function SetupLinkPage() {
   }, [isLoading, authToken, token, router]);
 
   return (
+    <AutoTranslate>
     <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] p-6">
       <Card className="w-full max-w-md space-y-4 p-6">
         {error ? (
@@ -55,5 +57,6 @@ export default function SetupLinkPage() {
         )}
       </Card>
     </div>
+    </AutoTranslate>
   );
 }

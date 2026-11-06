@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { KgNode, KgEdge } from '@/lib/api';
@@ -182,7 +184,7 @@ export function KgGraph({
     'bg-[var(--background)]/90 backdrop-blur text-[var(--foreground)] text-base leading-none ' +
     'hover:bg-[var(--accent)] cursor-pointer transition-colors shadow-sm';
 
-  return (
+  return wrapLocalized(
     <div className="relative w-full h-full">
       <svg
         ref={svgRef}
@@ -229,7 +231,7 @@ export function KgGraph({
             focusSet.has(edge.targetNodeId);
           const base = 0.28 + Math.min(0.7, edge.confidence) * 0.72;
           const opacity = selected ? 1 : inFocus ? base : 0.06;
-          return (
+          return wrapLocalized(
             <line
               key={edge.id}
               x1={a.x}
@@ -260,7 +262,7 @@ export function KgGraph({
           const dimmed = focusSet ? !focusSet.has(node.id) : false;
           // Radius grows with connectivity so hubs read as more important.
           const r = (selected ? 5 : 0) + 6 + Math.sqrt(deg / maxDegree) * 8;
-          return (
+          return wrapLocalized(
             <g
               key={node.id}
               transform={`translate(${p.x} ${p.y})`}

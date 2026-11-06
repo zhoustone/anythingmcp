@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/lib/theme-context';
@@ -6,7 +8,7 @@ import { siteSettings, FOOTER_LINKS_CHANGED } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 
 function SunIcon({ size = 16 }: { size?: number }) {
-  return (
+  return wrapLocalized(
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2" /><path d="M12 20v2" />
@@ -18,7 +20,7 @@ function SunIcon({ size = 16 }: { size?: number }) {
 }
 
 function MoonIcon({ size = 16 }: { size?: number }) {
-  return (
+  return wrapLocalized(
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
     </svg>
@@ -26,7 +28,7 @@ function MoonIcon({ size = 16 }: { size?: number }) {
 }
 
 function MonitorIcon({ size = 16 }: { size?: number }) {
-  return (
+  return wrapLocalized(
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
     </svg>
@@ -74,7 +76,7 @@ export function Footer() {
     { value: 'system' as const, label: 'System', icon: MonitorIcon },
   ];
 
-  return (
+  return wrapLocalized(
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -105,7 +107,7 @@ export function Footer() {
           <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[var(--surface-2)] border border-[var(--border)]">
             {themeOptions.map((opt) => {
               const isActive = theme === opt.value;
-              return (
+              return wrapLocalized(
                 <button
                   key={opt.value}
                   onClick={() => setTheme(opt.value)}

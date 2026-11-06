@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -131,7 +133,7 @@ export function LicenseWall() {
           ? 'Your subscription is not active — usually a renewal payment that did not go through. Update your payment method in the billing portal and it resumes; buying a new plan would start a second subscription beside this one. Your connectors and configurations are preserved.'
           : 'Your license is no longer active. Purchase or renew a license to continue using AnythingMCP. Your connectors and configurations are preserved.';
 
-  return (
+  return wrapLocalized(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[14px] p-8 max-w-md w-full mx-4 max-h-[calc(100dvh-2rem)] overflow-y-auto text-center shadow-[var(--shadow)]">
         <div className="flex justify-center mb-4">

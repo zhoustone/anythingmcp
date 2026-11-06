@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 /**
  * Unified toast system built on @radix-ui/react-toast.
@@ -71,7 +73,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo(() => ({ show }), [show]);
 
-  return (
+  return wrapLocalized(
     <ToastContext.Provider value={value}>
       <ToastPrimitive.Provider swipeDirection="right" duration={5000}>
         {children}

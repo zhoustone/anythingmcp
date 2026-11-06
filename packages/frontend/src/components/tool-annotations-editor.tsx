@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useEffect, useState } from 'react';
 import { tools, type ToolAnnotations } from '@/lib/api';
@@ -130,7 +132,7 @@ export function ToolAnnotationsEditor({
 
   const readOnly = effective.readOnlyHint === true;
 
-  return (
+  return wrapLocalized(
     <div className="space-y-3">
       <p className="text-xs text-[var(--text-3)]">
         Hints MCP clients read before calling this tool — most importantly whether it
@@ -156,7 +158,7 @@ export function ToolAnnotationsEditor({
           // Per the spec these two only carry meaning for a write.
           const dimmed =
             readOnly && (key === 'destructiveHint' || key === 'idempotentHint');
-          return (
+          return wrapLocalized(
             <div
               key={key}
               className={`flex items-center justify-between gap-3 ${dimmed ? 'opacity-50' : ''}`}

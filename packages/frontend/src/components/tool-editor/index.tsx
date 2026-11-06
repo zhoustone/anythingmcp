@@ -1,4 +1,6 @@
 'use client';
+import { AutoTranslate } from '@/components/auto-translate';
+const wrapLocalized = (node: React.ReactNode) => <AutoTranslate>{node}</AutoTranslate>;
 
 import { useState, useEffect, useCallback } from 'react';
 import { AppSelect } from '@/components/ui/select';
@@ -682,7 +684,7 @@ export function ToolEditor({
     !bodyMappingJsonInvalid &&
     !mappingStateInvalid(responseMapping);
 
-  return (
+  return wrapLocalized(
     <div className="border border-[var(--border)] rounded-lg p-5 space-y-5 bg-[var(--card)]">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -1135,7 +1137,7 @@ export function ToolEditor({
                 <p className="text-[10px] font-medium text-[var(--muted-foreground)]">Query Key Overrides</p>
                 {params.filter(p => (p.target === 'query' || p.target === 'graphql_var') && p.queryKey).map((param) => {
                   const idx = params.indexOf(param);
-                  return (
+                  return wrapLocalized(
                     <div key={idx} className="flex items-center gap-2 text-xs">
                       <span className="font-mono text-[var(--muted-foreground)] w-32">{param.name}</span>
                       <span className="text-[var(--muted-foreground)]">&rarr;</span>
@@ -1159,7 +1161,7 @@ export function ToolEditor({
                 <p className="text-[10px] font-medium text-[var(--muted-foreground)]">Header Name Overrides</p>
                 {params.filter(p => p.target === 'header').map((param, _) => {
                   const idx = params.indexOf(param);
-                  return (
+                  return wrapLocalized(
                     <div key={idx} className="flex items-center gap-2 text-xs">
                       <span className="font-mono text-[var(--muted-foreground)] w-32">{param.name}</span>
                       <span className="text-[var(--muted-foreground)]">&rarr;</span>
