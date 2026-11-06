@@ -97,7 +97,7 @@ body:
       description: OS, Node.js version, Docker version, browser, etc.
       placeholder: |
         - OS: macOS 15 / Ubuntu 24.04 / Windows 11
-        - Node.js: 22.x
+        - Node.js: 20.19.0
         - Docker: 27.x
         - Browser: Chrome 131
     validations:

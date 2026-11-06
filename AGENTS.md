@@ -12,7 +12,7 @@ Follow nested `AGENTS.md` instructions within their folders; leave
 
 ## Setup
 
-Use Node.js >= 22.12 (root `package.json`), npm >= 9, and Docker with Compose.
+Use Node.js >= 20.19.0 (root `package.json`), npm >= 9, and Docker with Compose.
 Run the interactive setup from the repository root:
 
 ```bash
@@ -131,6 +131,9 @@ Read [docs/tool-definition.md](docs/tool-definition.md); run adapter commands fr
 
 ## Hard rules and deployment modes
 
+Keep `better-sqlite3` at 12.9.0: later releases dropped Node 20 prebuilt
+binaries and require a C++ toolchain on Windows. Do not bump it without keeping
+Node 20 installable.
 Keep every organization-scoped query filtered by `organizationId`.
 Never log secrets; use NestJS `Logger` instead of production `console.log`.
 Validate input through DTOs with `class-validator`; follow existing NestJS patterns.

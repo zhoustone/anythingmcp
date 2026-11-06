@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ApiError, auth, license, server, sso, type SsoProviderButton, recoveryCodes as recoveryApi } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { useI18n } from '@/lib/i18n-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { useToast } from '@/components/toast';
 import { buildPricingUrl } from '@/lib/marketing';
 import { LogoIcon } from '@/components/logo-icon';
@@ -99,6 +101,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
+  const { t } = useI18n();
   const toast = useToast();
 
   const redirectTo = safeRedirect(searchParams.get('redirect'));
@@ -215,14 +218,14 @@ function LoginForm() {
       try {
         const result = await sso.exchange(ssoCode);
         if (!result.accessToken) {
-          setError(result.error || 'Sign-in code is invalid or has expired');
+          setError(result.error || t('login.errorSsoCode'));
           setSsoExchanging(false);
           return;
         }
         login(result.accessToken, result.user);
         router.replace(redirectTo);
       } catch (err: any) {
-        setError(err.message || 'Sign-in failed');
+        setError(err.message || t('login.errorSignInFailed'));
         setSsoExchanging(false);
       }
     })();
@@ -241,18 +244,18 @@ function LoginForm() {
         // Validate password strength
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
         if (!passwordRegex.test(password)) {
-          setError('Password must be at least 8 characters and include uppercase, lowercase, number, and special character');
+          setError(t('login.errorPasswordStrength'));
           setLoading(false);
           return;
         }
         // Validate confirm password
         if (password !== confirmPassword) {
-          setError('Passwords do not match');
+          setError(t('login.errorPasswordsMismatch'));
           setLoading(false);
           return;
         }
         if (!acceptTerms) {
-          setError('You must accept the Terms of Use');
+          setError(t('login.errorAcceptTerms'));
           setLoading(false);
           return;
         }
@@ -347,7 +350,7 @@ function LoginForm() {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+      setError(err.message || t('login.errorAuthFailed'));
     } finally {
       setLoading(false);
     }
@@ -871,18 +874,16 @@ function LoginForm() {
               : 'text-xl font-semibold text-[var(--text)]'
           }
         >
-          {cloudSignup ? 'Create your free account' : isRegister ? 'Create your account' : 'Sign in'}
+          {cloudSignup ? t('login.createFreeAccount') : isRegister ? t('login.createAccount') : t('login.signIn')}
         </h1>
         <p className="text-[var(--text-2)] mt-1.5 text-sm leading-relaxed">
-          {cloudSignup
-            ? '7-day free trial · no credit card · connect Claude, ChatGPT, Copilot, Cursor or Meta Muse to your tools.'
-            : 'Create custom connectors for Claude, ChatGPT, Copilot, Meta Muse and any AI agent'}
+          {cloudSignup ? t('login.cloudTagline') : t('login.tagline')}
         </p>
       </div>
 
       {emailVerifiedParam === 'true' && (
         <div className={alertSuccess}>
-          Email verified successfully! You can now sign in.
+          {t('login.emailVerified')}
         </div>
       )}
 
@@ -890,7 +891,7 @@ function LoginForm() {
 
       {ssoExchanging && (
         <p className="text-center text-sm text-[var(--text-2)] py-6">
-          Signing you in…
+          {t('login.signingYouIn')}
         </p>
       )}
 
@@ -908,7 +909,7 @@ function LoginForm() {
           ))}
           <div className="flex items-center gap-3 pt-1">
             <div className="h-px flex-1 bg-[var(--border)]" />
-            <span className="text-[11.5px] text-[var(--text-3)]">or</span>
+            <span className="text-[11.5px] text-[var(--text-3)]">{t('login.or')}</span>
             <div className="h-px flex-1 bg-[var(--border)]" />
           </div>
         </div>
@@ -920,7 +921,7 @@ function LoginForm() {
       >
         {isRegister && (
           <div>
-            <label htmlFor="auth-name" className="block text-sm font-medium mb-1 text-[var(--text)]">Name</label>
+            <label htmlFor="auth-name" className="block text-sm font-medium mb-1 text-[var(--text)]">{t('login.name')}</label>
             <input
               id="auth-name"
               name="name"
@@ -928,7 +929,7 @@ function LoginForm() {
               autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
+              placeholder={t('login.yourName')}
               className={cn(inputClass, cloudSignup && 'h-[42px]')}
               required
             />
@@ -937,7 +938,7 @@ function LoginForm() {
 
         <div>
           <label htmlFor="auth-email" className="block text-sm font-medium mb-1 text-[var(--text)]">
-            {cloudSignup ? 'Work email' : 'Email'}
+            {cloudSignup ? t('login.workEmail') : t('login.email')}
           </label>
           <input
             id="auth-email"
@@ -953,7 +954,7 @@ function LoginForm() {
         </div>
 
         <div className={recoveryMode ? 'hidden' : undefined}>
-          <label htmlFor="auth-password" className="block text-sm font-medium mb-1 text-[var(--text)]">Password</label>
+          <label htmlFor="auth-password" className="block text-sm font-medium mb-1 text-[var(--text)]">{t('login.password')}</label>
           <input
             id="auth-password"
             name="password"
@@ -961,7 +962,7 @@ function LoginForm() {
             autoComplete={isRegister ? 'new-password' : 'current-password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Min. 8 characters"
+            placeholder={t('login.minPassword')}
             className={cn(inputClass, cloudSignup && 'h-[42px]')}
             // A hidden field that is still `required` blocks submission with
             // a validation bubble the user cannot see or reach.
@@ -971,11 +972,11 @@ function LoginForm() {
           {isRegister && password.length > 0 && (
             <ul className="mt-1.5 space-y-0.5 text-xs">
               {[
-                [password.length >= 8, 'At least 8 characters'],
-                [/[A-Z]/.test(password), 'One uppercase letter'],
-                [/[a-z]/.test(password), 'One lowercase letter'],
-                [/\d/.test(password), 'One number'],
-                [/[^a-zA-Z0-9]/.test(password), 'One special character'],
+                [password.length >= 8, t('login.ruleLength')],
+                [/[A-Z]/.test(password), t('login.ruleUppercase')],
+                [/[a-z]/.test(password), t('login.ruleLowercase')],
+                [/\d/.test(password), t('login.ruleNumber')],
+                [/[^a-zA-Z0-9]/.test(password), t('login.ruleSpecial')],
               ].map(([ok, label]) => (
                 <li key={label as string} className={ok ? 'text-[var(--ok)]' : 'text-[var(--text-3)]'}>
                   {ok ? '✓' : '•'} {label as string}
@@ -988,7 +989,7 @@ function LoginForm() {
         {isRegister && (
           <>
             <div>
-              <label htmlFor="auth-confirm-password" className="block text-sm font-medium mb-1 text-[var(--text)]">Confirm Password</label>
+              <label htmlFor="auth-confirm-password" className="block text-sm font-medium mb-1 text-[var(--text)]">{t('login.confirmPassword')}</label>
               <input
                 id="auth-confirm-password"
                 name="confirm-password"
@@ -996,7 +997,7 @@ function LoginForm() {
                 autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repeat your password"
+                placeholder={t('login.repeatPassword')}
                 className={cn(inputClass, cloudSignup && 'h-[42px]')}
                 required
                 minLength={8}
@@ -1011,25 +1012,25 @@ function LoginForm() {
                 className="mt-0.5 accent-[var(--brand)]"
               />
               <span className="text-sm text-[var(--text-2)]">
-                I accept the{' '}
+                {t('login.acceptTerms')}{' '}
                 <a
                   href="https://anythingmcp.com/en/agb"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--brand)] hover:underline font-medium"
                 >
-                  Terms of Use
+                  {t('login.termsOfUse')}
                 </a>
                 {cloudSignup && (
                   <>
-                    {' '}and have read the{' '}
+                    {' '}{t('login.andHaveRead')}{' '}
                     <a
                       href="https://anythingmcp.com/datenschutz"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[var(--brand)] hover:underline font-medium"
                     >
-                      Privacy Policy
+                      {t('login.privacyPolicy')}
                     </a>
                   </>
                 )}
@@ -1041,7 +1042,7 @@ function LoginForm() {
         {recoveryMode && (
           <div>
             <label htmlFor="auth-recovery-code" className="block text-sm font-medium mb-1 text-[var(--text)]">
-              Recovery code
+              {t('login.recoveryCode')}
             </label>
             <input
               id="auth-recovery-code"
@@ -1056,26 +1057,26 @@ function LoginForm() {
               required
             />
             <p className="text-xs text-[var(--text-2)] mt-1.5">
-              One of the codes you saved when setting up single sign-on. Each works once.
+              {t('login.recoveryHint')}
             </p>
           </div>
         )}
 
         <Button type="submit" disabled={loading} className={cn('w-full', cloudSignup && 'h-11 text-[15px] font-semibold')} size="lg">
           {loading
-            ? 'Loading...'
+            ? t('login.loading')
             : cloudSignup
-              ? 'Start free trial →'
+              ? t('login.submitTrial')
               : isRegister
-                ? 'Create Account'
+                ? t('login.submitRegister')
                 : recoveryMode
-                  ? 'Sign in with recovery code'
-                  : 'Sign In'}
+                  ? t('login.submitRecovery')
+                  : t('login.submitSignIn')}
         </Button>
 
         {cloudSignup && (
           <p className="text-center text-xs leading-relaxed text-[var(--text-3)]">
-            <span aria-hidden>🔒 </span>Encrypted with AES-256-GCM · hosted in Frankfurt, Germany
+            <span aria-hidden>🔒 </span>{t('login.encryptedNote')}
           </p>
         )}
       </form>
@@ -1084,7 +1085,7 @@ function LoginForm() {
         <p className="text-center text-sm mt-3 flex items-center justify-center gap-3">
           {!recoveryMode && (
             <Link href="/forgot-password" className="text-[var(--text-2)] hover:text-[var(--brand)] hover:underline">
-              Forgot password?
+              {t('login.forgotPassword')}
             </Link>
           )}
           {/*
@@ -1098,19 +1099,19 @@ function LoginForm() {
             onClick={() => { setRecoveryMode(!recoveryMode); setError(''); }}
             className="text-[var(--text-2)] hover:text-[var(--brand)] hover:underline"
           >
-            {recoveryMode ? 'Back to password sign-in' : 'Use a recovery code'}
+            {recoveryMode ? t('login.backToPassword') : t('login.useRecoveryCode')}
           </button>
         </p>
       )}
 
       {(registrationEnabled || isRegister) && (
         <p className="text-center text-sm text-[var(--text-2)] mt-3">
-          {isRegister ? 'Already have an account?' : "Don't have an account?"}{' '}
+          {isRegister ? t('login.hasAccount') : t('login.noAccount')}{' '}
           <button
             onClick={() => { setIsRegister(!isRegister); setError(''); }}
             className="text-[var(--brand)] hover:underline font-medium"
           >
-            {isRegister ? 'Sign In' : 'Register'}
+            {isRegister ? t('login.signIn') : t('login.register')}
           </button>
         </p>
       )}
@@ -1138,7 +1139,11 @@ export default function LoginPage() {
   return (
     // <main>, not a <div>: this page sits outside AppShell, so without it the
     // document has no main landmark for a screen reader to jump to.
-    <main className="min-h-dvh bg-[var(--bg)]">
+    <main className="relative min-h-dvh bg-[var(--bg)]">
+      {/* Signed-out visitors need the picker too — there is no sidebar here. */}
+      <div className="absolute right-4 top-4 z-10">
+        <LanguageSwitcher />
+      </div>
       <Suspense>
         <LoginForm />
       </Suspense>

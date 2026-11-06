@@ -13,7 +13,7 @@
 
 # Node runtime version, declared once and reused by every stage below so the
 # image always builds on a single, consistent Node major. The supported minimum
-# for local development is Node 22 (see "engines" in package.json); the shipped
+# for local development is Node 20.19 (see "engines" in package.json); the shipped
 # image tracks a newer release. Override with --build-arg NODE_VERSION=24-alpine.
 ARG NODE_VERSION=26-alpine
 

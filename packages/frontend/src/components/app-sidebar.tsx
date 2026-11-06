@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
+import { useI18n } from '@/lib/i18n-context';
+import type { MessageKey } from '@/lib/i18n';
 import { LogoIcon } from '@/components/logo-icon';
 import { cn } from '@/lib/utils';
 import { GithubStarButton } from '@/components/github-star-button';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 /* ── Inline icons (match the redesign prototype) ── */
 function I({ d, children, ...p }: { d?: string; children?: React.ReactNode } & React.SVGProps<SVGSVGElement>) {
@@ -39,36 +42,38 @@ const SettingsIcon = () => (
   <I><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></I>
 );
 
-type NavLink = { href: string; label: string; icon: () => React.ReactNode };
-type NavGroup = { group: string; items: NavLink[] };
+// Labels are message keys, never literal English: the active-locale lookup
+// happens at render time so switching language needs no route change.
+type NavLink = { href: string; label: MessageKey; icon: () => React.ReactNode };
+type NavGroup = { group: MessageKey; items: NavLink[] };
 
 const NAV: NavGroup[] = [
   {
-    group: 'Overview',
+    group: 'nav.overview',
     items: [
-      { href: '/', label: 'Dashboard', icon: DashboardIcon },
-      { href: '/analytics', label: 'Analytics', icon: AnalyticsIcon },
-      { href: '/logs', label: 'Audit Log', icon: LogsIcon },
+      { href: '/', label: 'nav.dashboard', icon: DashboardIcon },
+      { href: '/analytics', label: 'nav.analytics', icon: AnalyticsIcon },
+      { href: '/logs', label: 'nav.auditLog', icon: LogsIcon },
     ],
   },
   {
-    group: 'Build',
+    group: 'nav.build',
     items: [
-      { href: '/connectors', label: 'Connectors', icon: ConnectorsIcon },
-      { href: '/connectors/store', label: 'Marketplace', icon: StoreIcon },
-      { href: '/mcp-server', label: 'MCP Servers', icon: McpIcon },
+      { href: '/connectors', label: 'nav.connectors', icon: ConnectorsIcon },
+      { href: '/connectors/store', label: 'nav.marketplace', icon: StoreIcon },
+      { href: '/mcp-server', label: 'nav.mcpServers', icon: McpIcon },
     ],
   },
   {
-    group: 'Intelligence',
+    group: 'nav.intelligence',
     items: [
-      { href: '/knowledge-graph', label: 'Knowledge Graph', icon: KgIcon },
-      { href: '/knowledge-graph/skills', label: 'AI Skills', icon: SkillsIcon },
+      { href: '/knowledge-graph', label: 'nav.knowledgeGraph', icon: KgIcon },
+      { href: '/knowledge-graph/skills', label: 'nav.aiSkills', icon: SkillsIcon },
     ],
   },
   {
-    group: 'Get started',
-    items: [{ href: '/welcome', label: 'Setup & onboarding', icon: OnboardingIcon }],
+    group: 'nav.getStarted',
+    items: [{ href: '/welcome', label: 'nav.setupOnboarding', icon: OnboardingIcon }],
   },
 ];
 
@@ -89,6 +94,7 @@ function bestHref(pathname: string): string | null {
 export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const { user, orgName, orgs, switchOrg, logout } = useAuth();
+  const { t } = useI18n();
   const [wsMenu, setWsMenu] = useState(false);
   const wsRef = useRef<HTMLDivElement>(null);
 
@@ -124,7 +130,7 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
         {NAV.map((g) => (
           <div key={g.group}>
             <div className="px-2.5 pb-1 pt-2.5 text-[10.5px] font-semibold uppercase tracking-[0.06em] text-[var(--text-3)]">
-              {g.group}
+              {t(g.group)}
             </div>
             {g.items.map((item) => (
                 <Link
@@ -139,7 +145,7 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
                   )}
                 >
                   <item.icon />
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               ))}
           </div>
@@ -147,13 +153,16 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
       </nav>
 
       <GithubStarButton />
+      <div className="px-3 pb-3">
+        <LanguageSwitcher />
+      </div>
 
       {/* Footer: Settings + workspace switcher */}
       <div className="relative border-t border-[var(--border)] p-3" ref={wsRef}>
         {wsMenu && (
           <div className="absolute inset-x-3 bottom-[64px] z-50 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]">
             <div className="px-3 py-2 text-[10.5px] font-semibold uppercase tracking-[0.05em] text-[var(--text-3)]">
-              Switch workspace
+              {t('nav.switchWorkspace')}
             </div>
             {(orgs || []).map((org) => {
               const isCurrent = org.id === user?.organizationId;
@@ -185,7 +194,7 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
                 className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-[13px] font-medium text-[var(--danger)] hover:bg-[var(--t-danger-bg)]"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /></svg>
-                Log out
+                {t('nav.logOut')}
               </button>
             </div>
           </div>
@@ -202,7 +211,7 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
           )}
         >
           <SettingsIcon />
-          Settings
+          {t('nav.settings')}
         </Link>
 
         <button
@@ -213,7 +222,7 @@ export function AppSidebar({ mobileOpen, onClose }: { mobileOpen: boolean; onClo
             {orgInitials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[12.5px] font-semibold text-[var(--text)]">{orgName || 'Workspace'}</div>
+            <div className="truncate text-[12.5px] font-semibold text-[var(--text)]">{orgName || t('nav.workspace')}</div>
             <div className="text-[11px] text-[var(--text-3)]">{user?.email}</div>
           </div>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5" /></svg>

@@ -59,9 +59,29 @@ Read [AGENTS.md](../AGENTS.md) for AI coding agent commands and repository rules
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js 20.19+
 - npm 9+
 - Docker and Docker Compose (for PostgreSQL)
+
+> On Node 20, `npm ci` can print `EBADENGINE` warnings for `tedious` (pulled in
+> by `mssql`) and `@prisma/streams-local` (Prisma dev tooling). npm does not
+> enforce `engines` in this repo, so the install still succeeds; verify the SQL
+> Server connector if you rely on it under Node 20.
+
+`better-sqlite3` is pinned to `12.9.0`, the last release that ships a prebuilt
+binary for Node 20 (ABI 115). From 12.10.0 upstream removed Node 20 prebuilds,
+which forces `node-gyp` to compile from source — on Windows that requires the
+Visual Studio "Desktop development with C++" workload. Do not bump this
+dependency without keeping Node 20 installable.
+
+`prebuild-install` downloads that binary from GitHub Releases. If those are
+unreachable from your network, create a local `.npmrc` (gitignored) pointing it
+at a mirror, and point `disturl` at a Node headers mirror for any source build:
+
+```
+better_sqlite3_binary_host=<mirror>/better-sqlite3
+disturl=<mirror>/node
+```
 
 ### Quick Setup
 

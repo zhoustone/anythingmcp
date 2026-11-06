@@ -137,7 +137,7 @@ main() {
   local mode_choice
   mode_choice=$(ask_choice "Choose mode" \
     "Docker (recommended for production)" \
-    "Local development (requires Node.js 22+)")
+    "Local development (requires Node.js 20.19+)")
 
   local MODE
   case "$mode_choice" in
@@ -158,11 +158,11 @@ main() {
     fi
   else
     if ! command -v node &> /dev/null; then
-      error "Node.js is not installed. Please install Node.js 22+: https://nodejs.org"
+      error "Node.js is not installed. Please install Node.js 20.19+: https://nodejs.org"
       exit 1
     fi
     if ! command -v npm &> /dev/null; then
-      error "npm is not found. Please install Node.js 22+ with npm."
+      error "npm is not found. Please install Node.js 20.19+ with npm."
       exit 1
     fi
   fi

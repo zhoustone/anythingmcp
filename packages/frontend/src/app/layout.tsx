@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
+import { cookies } from 'next/headers';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
+import { LOCALE_COOKIE, parseLocale } from '@/lib/i18n';
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -60,16 +62,19 @@ export const dynamic = 'force-dynamic';
 // Inline script to prevent FOUC — runs before React hydrates
 const themeScript = `(function(){try{var t=localStorage.getItem('theme');var d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.classList.add('dark')}catch(e){}})()`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const gtmEnabled = Boolean(process.env.GTM_ID);
   const cookieDomain = process.env.COOKIE_DOMAIN;
+  // Read the same cookie the client picker writes. Unknown values fall back
+  // to English, so a forged cookie can never reach the rendered `lang` attr.
+  const locale = parseLocale((await cookies()).get(LOCALE_COOKIE)?.value);
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: TRANSLATION_SAFE_DOM_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
@@ -78,7 +83,7 @@ export default function RootLayout({
       </head>
       <body>
         <GoogleTagManagerNoscript />
-        <Providers>
+        <Providers locale={locale}>
           <LicenseWall />
           {children}
         </Providers>

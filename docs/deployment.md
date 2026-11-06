@@ -71,7 +71,7 @@ Run PostgreSQL in Docker, frontend and backend locally with hot reload.
 
 ### Prerequisites
 
-- **Node.js** 22+
+- **Node.js** 20.19+
 - **npm** 9+
 - **Docker** and **Docker Compose** (for PostgreSQL)
 

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTheme } from '@/lib/theme-context';
+import { useI18n } from '@/lib/i18n-context';
 import { AppSidebar } from '@/components/app-sidebar';
 import { Footer } from '@/components/footer';
 import { TrialBanner } from '@/components/trial-banner';
@@ -47,11 +48,12 @@ function ThemeToggle({
   setTheme: ReturnType<typeof useTheme>['setTheme'];
   className?: string;
 }) {
+  const { t } = useI18n();
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      title="Toggle theme"
-      aria-label="Toggle theme"
+      title={t('common.toggleTheme')}
+      aria-label={t('common.toggleTheme')}
       className={cn(
         'flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[9px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]',
         className
@@ -78,6 +80,7 @@ export function AppShell({
 }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
+  const { t } = useI18n();
   const isDark = resolvedTheme === 'dark';
 
   const headerTitle = title ?? breadcrumbs?.[breadcrumbs.length - 1]?.label;
@@ -108,7 +111,7 @@ export function AppShell({
           <div className="flex min-w-0 flex-1 items-center gap-3 max-md:basis-full">
             <button
               onClick={() => setMobileOpen(true)}
-              aria-label="Open navigation"
+              aria-label={t('common.openNavigation')}
               className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[9px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text-2)] md:hidden"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
